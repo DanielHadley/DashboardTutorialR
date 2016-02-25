@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title: Daily Dashboard</title>
+
+<!-- Highcharts scripts -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>
+$(function() {
+    $('#container').highcharts({
+        title: {
+            text: 'Monthly Average Temperature',
+            x: -20 //center
+        },
+        subtitle: {
+            text: 'Source: WorldClimate.com',
+            x: -20
+        },
+        xAxis: {
+            categories: [<!--rinline I(shQuote(dates)) -->]
+        },
+        yAxis: {
+            title: {
+                text: 'Temperature (°C)'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: '°C'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'Tokyo',
+            data: [<!--rinline I(Tokyo) -->]
+        }, {
+            name: 'London',
+            data: [<!--rinline I(London) -->]
+        }]
+    });
+});  
+</script>
+
+</head>
+<body>
+
+<h1>This is a Heading: Check out These Average Temperatures!</h1>
+<p>This is a paragraph. Check out this timeseries. Over the last 12 months, London had an average temperature of <!--rinline I(mean_of_London) --> while Tokyo had an average of <!--rinline I(mean_of_Tokyo) -->. Now here is a chart:</p>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+</body>
+</html>
