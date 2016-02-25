@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<!-- created by Daniel Hadley from twitter bootstrap -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Somerville Systems</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- reload each hour -->
+    <meta http-equiv="refresh" content="3600">
+
+    <!-- styles -->
+      <link href="css/bootstrap.css" rel="stylesheet">
+      <link href="css/bootstrap-responsive.css" rel="stylesheet">
+      <link href="css/docs.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Highcharts scripts -->
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+      <script src="js/highcharts.js"></script> 
+
+    <!-- Leaflet scripts -->
+      <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
+      <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+      <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    
+</head>
+
+  <body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true">
+    
+
+    <!-- Navbar
+    ================================================== -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="index.html">Home</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="">
+                <a href="index.html">Home</a>
+              </li>
+              <li class="">
+                <a href="live.html">Live</a>
+              </li>
+              <li class="">
+                <a href="work.html">Work</a>
+              </li>
+              <li class="">
+                <a href="play.html">Play</a>
+              </li>
+              <li class="">
+                <a href="family.html">Raise a Family</a>
+              </li>
+              <li class="active">
+                <a href="daily.html">Daily</a>
+              <li class="">
+                <a href="http://www.somervillema.gov/">City Home</a>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div class="jumbotron masthead">
+  <div class="container">
+    <p>The City of Somerville's Key Systems Indicators</p>  
+    
+  </div>
+</div>
+
+
+<!-- The Charts are all here so that I can style them in a similar way.
+They load to the specified containers -->
+
+<script>
+    $(function() {
+    Highcharts.setOptions({
+        chart: {
+            backgroundColor: 'rgba(230, 230, 230, .9)',
+            borderWidth: 0,
+            plotBackgroundColor: 'rgba(255, 255, 255, .9)',
+            plotShadow: true,
+            plotBorderWidth: 1,
+	    style: {
+            fontFamily: 'Helvetica'
+	    }
+        }
+    });
+
+<!-- Constituent Services -->
+    var chart1 = new Highcharts.Chart({
+        chart: {
+            renderTo: 'AllConstituentServicesContainer',
+        type: 'column'
+        },
+    title: {
+                text: 'Top 311 Calls Yesterday, <!--rinline I(format(Sys.Date() - 1, "%m-%d-%Y")) -->'
+            },
+         subtitle: {
+                text: 'Source: 311'
+            },
+        
+        xAxis: {
+                categories: [<!--rinline I(shQuote(TopFifteen_cs$typeName)) -->]
+            },
+    yAxis: {
+                title: {
+                    text: 'Calls'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+    
+    legend: {
+        enabled: false
+    },
+
+        series: [{
+        name: 'Calls',
+            data: [<!--rinline I(TopFifteen_cs$count) -->]
+          }]
+    });
+
+<!-- Quality of Life Time Series -->
+  var chart1 = new Highcharts.Chart({
+        chart: {
+            renderTo: 'QoLTSChartContainer',
+      type: 'line'
+        },
+  title: {
+                text: 'Quality of Life Calls'
+        },
+       subtitle: {
+                text: 'Source: 311'
+        },
+      
+        xAxis: {
+                categories: [<!--rinline I(shQuote(forTS_qol$Date_max)) -->]
+        },
+  yAxis: {
+                title: {
+                    text: 'Calls Per Week'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+        },
+
+        series: [{
+      name: 'Graffiti',
+            data: [<!--rinline I(forTS_qol$Graffiti) -->]
+        }, {
+      name: 'Rats',
+            data: [<!--rinline I(forTS_qol$Rats) -->]
+        }, {
+      name: 'Trash',
+            data: [<!--rinline I(forTS_qol$`Trash/debris on sidewalk report`) -->]
+        }]
+    });
+
+<!-- Top Three 311 Pie Charts 1 of 3 -->
+  var chart1 = new Highcharts.Chart({
+      chart: {
+          renderTo: 'TopThreePieOne',
+          type: 'pie'
+      },
+      title: {
+          text: <!--rinline I(shQuote(names(forChart_TopThree_cs[1]))) -->
+      },
+      subtitle: {
+                text: 'Median Hours Open : <!--rinline I(round(HoursOpen$HoursOpen[1], 0)) -->'
+      },
+      plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: false
+                }
+            }
+        },
+      series: [{
+          name: 'n',
+          data: [
+              ['Closed', <!--rinline I(PortionOpen$Closed[1]) -->],
+              ['Open', <!--rinline I(PortionOpen$Open[1]) -->],
+          ]
+      }]
+  });
+
+<!-- Top Three 311 Pie Charts 2 of 3 -->
+  var chart1 = new Highcharts.Chart({
+      chart: {
+          renderTo: 'TopThreePieTwo',
+          type: 'pie'
+      },
+      title: {
+          text: <!--rinline I(shQuote(names(forChart_TopThree_cs[2]))) -->
+      },
+      subtitle: {
+                text: 'Median Hours Open : <!--rinline I(round(HoursOpen$HoursOpen[2], 0)) -->'
+      },
+      plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: false
+                }
+            }
+        },
+      series: [{
+          name: 'n',
+          data: [
+              ['Closed', <!--rinline I(PortionOpen$Closed[2]) -->],
+              ['Open', <!--rinline I(PortionOpen$Open[2]) -->],
+          ]
+      }]
+  });
+
+<!-- Top Three 311 Pie Charts 3 of 3 -->
+  var chart1 = new Highcharts.Chart({
+      chart: {
+          renderTo: 'TopThreePieThree',
+          type: 'pie'
+      },
+      title: {
+          text: <!--rinline I(shQuote(names(forChart_TopThree_cs[3]))) -->
+      },
+      subtitle: {
+                text: 'Median Hours Open : <!--rinline I(round(HoursOpen$HoursOpen[3], 0)) -->'
+      },
+      plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: false
+                }
+            }
+        },
+      series: [{
+          name: 'n',
+          data: [
+              ['Closed', <!--rinline I(PortionOpen$Closed[3]) -->],
+              ['Open', <!--rinline I(PortionOpen$Open[3]) -->],
+          ]
+      }]
+  });
+
+<!-- Quality of Life Time Series -->
+  var chart1 = new Highcharts.Chart({
+        chart: {
+            renderTo: 'TopThreeTSChartContainer',
+      type: 'line'
+        },
+  title: {
+                text: 'Calls That Increased Sharply'
+        },
+       subtitle: {
+                text: 'Source: 311'
+        },
+      
+        xAxis: {
+                categories: [<!--rinline I(shQuote(forChart_TopThree_cs$Date_max)) -->]
+        },
+  yAxis: {
+                title: {
+                    text: 'Calls Per Week'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+        },
+
+        series: [{
+      name: <!--rinline I(shQuote(names(forChart_TopThree_cs[1]))) -->,
+            data: [<!--rinline I(forChart_TopThree_cs[,1]) -->]
+        }, {
+      name: <!--rinline I(shQuote(names(forChart_TopThree_cs[2]))) -->,
+            data: [<!--rinline I(forChart_TopThree_cs[,2]) -->]
+        }, {
+      name: <!--rinline I(shQuote(names(forChart_TopThree_cs[3]))) -->,
+            data: [<!--rinline I(forChart_TopThree_cs[,3]) -->]
+        }]
+    });
+
+<!-- Police Criminal Incidents Time Series -->
+  var chart1 = new Highcharts.Chart({
+        chart: {
+            renderTo: 'CI_TS_ChartContainer',
+      type: 'line'
+        },
+  title: {
+                text: 'Select Criminal Incidents By Week'
+        },
+       subtitle: {
+                text: 'Source: Somerville Police'
+        },
+      
+        xAxis: {
+                categories: [<!--rinline I(shQuote(TimeSeries_ci$Date_max)) -->]
+        },
+  yAxis: {
+                title: {
+                    text: 'Calls Per Week'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+        },
+
+        series: [{
+      name: <!--rinline I(shQuote(names(TimeSeries_ci[1]))) -->,
+            data: [<!--rinline I(TimeSeries_ci[,1]) -->]
+        }, {
+      name: <!--rinline I(shQuote(names(TimeSeries_ci[2]))) -->,
+            data: [<!--rinline I(TimeSeries_ci[,2]) -->]
+        }, {
+      name: <!--rinline I(shQuote(names(TimeSeries_ci[3]))) -->,
+            data: [<!--rinline I(TimeSeries_ci[,3]) -->]
+        }, {
+      name: <!--rinline I(shQuote(names(TimeSeries_ci[4]))) -->,
+            data: [<!--rinline I(TimeSeries_ci[,4]) -->]
+        }]
+    });
+
+<!-- Google Analytics -->
+    var chart1 = new Highcharts.Chart({
+        chart: {
+            renderTo: 'GoogleAnalyticsContainer',
+        type: 'column'
+        },
+    title: {
+                text: 'Top Website Views Yesterday, <!--rinline I(format(Sys.Date() - 1, "%m-%d-%Y")) -->'
+            },
+         subtitle: {
+                text: 'Source: Google Analytics'
+            },
+        
+        xAxis: {
+                categories: [<!--rinline I(shQuote(TopFifteen_ga$pageTitle)) -->]
+            },
+    yAxis: {
+                title: {
+                    text: 'Views'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+    
+    legend: {
+        enabled: false
+    },
+
+        series: [{
+        name: 'Views',
+            data: [<!--rinline I(TopFifteen_ga$pageviews) -->]
+          }]
+    });
+
+<!-- Inspectional Services Building Permits -->
+    var chart1 = new Highcharts.Chart({
+        chart: {
+            renderTo: 'ISDBuildingContainer',
+        type: 'column'
+        },
+    title: {
+                text: 'Top Permits and Licenses From Yesterday, <!--rinline I(format(Sys.Date() - 1, "%m-%d-%Y")) -->'
+            },
+         subtitle: {
+                text: 'Source: Citizenserve'
+            },
+        
+        xAxis: {
+                categories: [<!--rinline I(shQuote(Top_isd$PermitType)) -->]
+            },
+    yAxis: {
+                title: {
+                    text: 'Permit Requests'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+    
+    legend: {
+        enabled: false
+    },
+
+        series: [{
+        name: 'Permit Requests',
+            data: [<!--rinline I(Top_isd$count) -->]
+          }]
+    });
+
+<!-- This is an empty chart- a place holder if we want to use more than one chart but style them in the same way -->
+    var chart2 = new Highcharts.Chart({
+        chart: {
+            renderTo: 'container2',
+            type: 'column'
+        },
+
+        xAxis: {
+            type: 'datetime'
+        },
+
+        series: [{
+            data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+            pointStart: Date.UTC(2010, 0, 1),
+            pointInterval: 3600 * 1000 // one hour
+        }]
+    });
+});
+
+</script>
+
+
+
+
+<!-- Intro -->
+<div class="container">
+    <div class="marketing">
+    <div class="row-fluid">
+      <h1 class="section header">Hello</h1>
+        <div class="row">
+        <div class="span12">
+          <p>Welcome to the City of Somerville's daily dashboard. The current temperature on the <a href="http://understoryweather.com/">Somerville High roof</a> is <span id="remoteFeed"></span>. Below, you will find data used by the Mayor's Office to track important trends on a daily and weekly basis.</p>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<!-- Constituent Services -->
+<div class="container">
+    <div class="marketing">
+    	<div class="row-fluid">
+    	  <h1 class="section header">311 Calls</h1>
+	       <p>Yesterday, the Somerville 311 line received <!--rinline I(formatC(nrow(Yesterday_cs))) --> calls from constituents, which is <!--rinline I(comparisonCS) --> for a <!--rinline I(yesterdayType) -->. Access the full dataset <a href="https://data.somervillema.gov/311-Call-Center/311-Constituent-Services-Daily-Calls/vqwi-n3ah">here</a>.</p>
+	    <div class="row">
+    		<div class="span12">
+    		    <div id="AllConstituentServicesContainer" style="width:100%; height:400px;"></div>
+    		</div>
+	    </div>
+
+      <br></br>
+
+        <h3 class="section header">Significant Calls</h3>
+        <p>The chart above usually contains many of the same call types, which is why we track calls that increase more than average. During the last seven days, there was an increase in calls for <FONT COLOR="#2f7ed8"><!--rinline I(names(forChart_TopThree_cs[1])) --></FONT>, <FONT COLOR="#0d233a"><!--rinline I(names(forChart_TopThree_cs[2])) --></FONT>, and <FONT COLOR="#8bbc21"><!--rinline I(names(forChart_TopThree_cs[3])) --></FONT>. This chart shows calls of those types for the last 120 days, while the map shows their location for the last week. Often, spatial clusters indicate that DPW is calling in the work orders and closing them pro-actively.</p>
+        <div class="row">
+        <div class="span6">
+          <div id="TopThreeTSChartContainer" style="width:100%; height:400px;"></div>
+        </div>
+        <div class="span6">
+            <div id="uniquecs-map" style="height: 400px"></div>
+            <script>
+
+              // initialize the map
+              var umap = L.map('uniquecs-map', {scrollWheelZoom:false}).setView([42.3947, -71.10548], 13);
+
+              // load a tile layer
+              L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
+                {
+                  attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+                  maxZoom: 17,
+                  minZoom: 9
+                }).addTo(umap);
+
+              // load GeoJSON from an external file: gis.stackexchange.com/questions/68489/how-to-load-external-geojson-file-into-leaflet-map
+
+              // Function to make popup
+              function onEachFeatureU(feature, layer) {
+                popupOptions = {maxWidth: 200};
+                layer.bindPopup("<b>Date:</b> " + feature.properties.Date +
+                  "<br><b>Type: </b>" + feature.properties.typeName +
+                  "<br><b>Comments: </b>" + feature.properties.comments,
+                  popupOptions);
+                  }
+
+              function fillingU(x) {
+                return x == <!--rinline I(shQuote(names(forChart_TopThree_cs[3]))) --> ? "#8bbc21" :
+                       x == <!--rinline I(shQuote(names(forChart_TopThree_cs[2]))) --> ? "#0d233a" :
+                       x == <!--rinline I(shQuote(names(forChart_TopThree_cs[1]))) --> ? "#2f7ed8" :
+                       "#808080";
+              }         
+
+              function pointToLayerU (feature, latlng) {
+                  return new L.CircleMarker(latlng, {
+                      radius: 10,
+                      fillColor: fillingU(feature.properties["typeName"]),
+                      color: "#000",
+                      weight: 1,
+                      opacity: .75,
+                      fillOpacity: 0.4
+                    })
+                }
+
+              $.ajax({
+              dataType: "json",
+              url: "./geo/daily/UniqueCS.geojson",
+              success: function (response) {
+                    geojsonLayer = L.geoJson(response, {
+                      pointToLayer: pointToLayerU,
+                      onEachFeature : onEachFeatureU
+                    }).addTo(umap);
+                }
+              }).error(function() {});
+            </script>
+        </div>
+        </div>
+
+        <br></br>
+
+        <p>Drilling down, we can see the proportion of <FONT COLOR="#2f7ed8">closed</FONT> work orders to <FONT COLOR="#0d233a">open</FONT> ones for these specific calls. This accounts for all work orders from the time we switched to the new 311 system in July '15 to yesterday (which means that some may have already been closed). We also see the amount of time these calls usually stay open by calculating the median hours open.</p>
+
+        <div class="row-fluid">
+          <div class="span4">
+              <div id="TopThreePieOne" style="width:100%; height:300px;"></div>
+          </div>
+          <div class="span4">
+              <div id="TopThreePieTwo" style="width:100%; height:300px;"></div>
+          </div>
+          <div class="span4">
+              <div id="TopThreePieThree" style="width:100%; height:300px;"></div>
+          </div>
+        </div>
+
+        <br></br>
+
+        <p>We also like to keep careful track of quality of life calls. Below are calls about <FONT COLOR="#2f7ed8">graffiti</FONT>, <FONT COLOR="#0d233a">rats</FONT>, and <FONT COLOR="#8bbc21">trash</FONT>. As before, the map show calls from the last week, and the time-series chart show the last 120 days.</p>
+        <div class="row">
+          <div class="span6">
+            <div id="QoLTSChartContainer" style="width:100%; height:400px;"></div>
+          </div>
+          <div class="span6">
+            <div id="qol-map" style="height: 400px"></div>
+            <script>
+
+              // initialize the map
+              var map = L.map('qol-map', {scrollWheelZoom:false}).setView([42.3947, -71.10548], 13);
+
+              // load a tile layer
+              L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
+                {
+                  attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+                  maxZoom: 17,
+                  minZoom: 9
+                }).addTo(map);
+
+              // load GeoJSON from an external file: gis.stackexchange.com/questions/68489/how-to-load-external-geojson-file-into-leaflet-map
+
+              // Function to make popup
+              function onEachFeature(feature, layer) {
+                    if (feature.properties && feature.properties.typeName) {
+                        layer.bindPopup(feature.properties.typeName);
+                    }
+                }
+
+              function filling(x) {
+                return x == 'Trash/debris on sidewalk report' ? "#8bbc21" :
+                       x == 'Rats' ? "#0d233a" :
+                       x == 'Graffiti' ? "#2f7ed8" :
+                       "#808080";
+              }         
+
+              function pointToLayer(feature, latlng) {
+                  return new L.CircleMarker(latlng, {
+                      radius: 10,
+                      fillColor: filling(feature.properties["typeName"]),
+                      color: "#000",
+                      weight: 1,
+                      opacity: .75,
+                      fillOpacity: 0.4
+                    })
+                }
+
+              $.ajax({
+              dataType: "json",
+              url: "./geo/daily/QualityOfLifeCS.geojson",
+              success: function (response) {
+                    geojsonLayer = L.geoJson(response, {
+                      pointToLayer: pointToLayer,
+                      onEachFeature : onEachFeature
+                    }).addTo(map);
+                }
+              }).error(function() {});
+            </script>
+          </div>
+        </div>
+
+	    </div>
+    </div>
+</div>
+
+
+<!-- Police -->
+<div class="container">
+    <div class="marketing">
+    <div class="row-fluid">
+      <h1 class="section header">Public Safety</h1>
+      <h3 class="section header">Criminal Incidents</h3>
+      <p>Below are data about <FONT COLOR="#2f7ed8">burglary</FONT>, <FONT COLOR="#0d233a">motor vehicle theft</FONT>, <FONT COLOR="#910000">theft from a motor vehicle</FONT>, and <FONT COLOR="#8bbc21">robbery</FONT>. In this case, the map shows incidents from the last fourteen days, and the time-series chart show the last 120 days by week. Access the raw data <a href="https://data.somervillema.gov/Public-Safety/Police-Selected-Criminal-Incidents/4jey-jqxb">here</a></p>
+        <div class="row">
+        <div class="span6">
+            <div id="CI_TS_ChartContainer" style="width:100%; height:400px;"></div>
+        </div>
+        <div class="span6">
+            <div id="policeci-map" style="height: 400px"></div>
+            <script>
+
+              // initialize the map
+              var pmap = L.map('policeci-map', {scrollWheelZoom:false}).setView([42.3947, -71.10548], 13);
+
+              // load a tile layer
+              L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
+                {
+                  attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+                  maxZoom: 17,
+                  minZoom: 9
+                }).addTo(pmap);
+
+              // load GeoJSON from an external file: gis.stackexchange.com/questions/68489/how-to-load-external-geojson-file-into-leaflet-map
+
+              // Function to make popup
+              function onEachFeatureP(feature, layer) {
+                popupOptions = {maxWidth: 200};
+                layer.bindPopup("<b>Date:</b> " + feature.properties.Date +
+                  "<br><b>Type: </b>" + feature.properties.offense,
+                  popupOptions);
+                  }
+
+              function fillingP(x) {
+                return x == 'BURGLARY/BREAKING AND ENTERING' ? "#2f7ed8" :
+                       x == 'THEFT FROM MOTOR VEHICLE' ? "#910000" :
+                       x == 'ROBBERY' ? "#8bbc21" :
+                       x == 'MOTOR VEHICLE THEFT' ? "#0d233a" :
+                       "#808080";
+              }         
+
+              function pointToLayerP (feature, latlng) {
+                  return new L.CircleMarker(latlng, {
+                      radius: 10,
+                      fillColor: fillingP(feature.properties["offense"]),
+                      color: "#000",
+                      weight: 1,
+                      opacity: .75,
+                      fillOpacity: 0.4
+                    })
+                }
+
+              $.ajax({
+              dataType: "json",
+              url: "./geo/daily/PoliceCI.geojson",
+              success: function (response) {
+                    geojsonLayer = L.geoJson(response, {
+                      pointToLayer: pointToLayerP,
+                      onEachFeature : onEachFeatureP
+                    }).addTo(pmap);
+                }
+              }).error(function() {});
+            </script>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<!-- Google Analytics -->
+<div class="container">
+    <div class="marketing">
+    <div class="row-fluid">
+      <h1 class="section header">Website Analytics</h1>
+      <p><a href="http://www.somervillema.gov/"> The City's official website </a> received <!--rinline I(sum(ga.df$pageviews)) --> pageviews yesterday.</p>
+        <div class="row">
+        <div class="span12">
+            <div id="GoogleAnalyticsContainer" style="width:100%; height:400px;"></div>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<!-- Inspectional Services Building Permits -->
+<div class="container">
+    <div class="marketing">
+    <div class="row-fluid">
+      <h1 class="section header">Permits and Licenses</h1>
+      <p>Below are data on the top permit and license applications from yesterday and a map of them from the last week. Dots on the map are sized based on the cost of the permit, which is a function of the amount of work being done. You can click on the dot to see whether it is a building permit or one of the other types issued by ISD, e.g., electrical, gas, or plumbing. Access the full dataset <a href="https://data.somervillema.gov/dataset/ISD-Building-Permit-Daily-Applications/q3yh-mp87">here</a>.</p>
+        <div class="row">
+        <div class="span6">
+            <div id="ISDBuildingContainer" style="width:100%; height:400px;"></div>
+        </div>
+        <div class="span6">
+          <div id="isd-map" style="height: 400px"></div>
+          <script>
+
+            // initialize the map
+            var imap = L.map('isd-map', {scrollWheelZoom:false}).setView([42.3947, -71.10548], 13);
+
+            // load a tile layer
+            L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
+              {
+                attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+                maxZoom: 17,
+                minZoom: 9
+              }).addTo(imap);
+
+            // load GeoJSON from an external file: gis.stackexchange.com/questions/68489/how-to-load-external-geojson-file-into-leaflet-map
+
+            // Function to make popup
+            function onEachFeatureISD(feature, layer) {
+              popupOptions = {maxWidth: 200};
+              layer.bindPopup("<b>Type:</b> " + feature.properties.PermitTypeDetail +
+                "<br><b>R or C?:</b> " + feature.properties.PermitType +
+                "<br><b>Work:</b> " + feature.properties.ProjectName +
+                "<br><b>Address: </b>" + feature.properties.Address +
+                "<br><b>Permit Amount: </b>$" + feature.properties.PermitAmount,
+                popupOptions);
+                }
+
+            function getRadiusStyle(x) {
+              area = x * .5;
+              radius = Math.sqrt(area / 3.1416);
+              return radius
+            }            
+
+            function pointToLayerISD (feature, latlng) {
+                return new L.CircleMarker(latlng, {
+                    radius: getRadiusStyle(feature.properties["PermitAmount"]),
+                    fillColor: "#8bbc22",
+                    color: "#000",
+                    weight: 1,
+                    opacity: .75,
+                    fillOpacity: 0.75
+                  })
+              }
+
+            $.ajax({
+            dataType: "json",
+            url: "./geo/daily/BuildingPermits.geojson",
+            success: function (response) {
+                  geojsonLayer = L.geoJson(response, {
+                    pointToLayer: pointToLayerISD,
+                    onEachFeature : onEachFeatureISD
+                  }).addTo(imap);
+              }
+            }).error(function() {});
+
+          </script>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<footer class="footer">
+        <div class="container">
+        <p>Somerville Systems : Daniel Hadley, Emily Monea, & Skye Stewart |
+        <a href=
+        "https://github.com/DanielHadley/SomervilleSystems">Code.</a></p>
+        <p><a href="mailto:dhadley@somervillema.gov">Contact us</a> with
+        questions, requests, and suggestions.</p><br>
+        <img alt="Kippt" src="./img/somervilleSeal.png"></div>
+</footer>
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/bootstrap.js">
+</script> 
+    
+
+</body></html>
